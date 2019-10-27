@@ -1,0 +1,1253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<!-- saved from url=(0046)http://spike.scu.edu.au/~barry/interrupts.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>DOS Interrupts</title>
+   <meta name="Author" content="">
+   <meta name="GENERATOR" content="Mozilla/3.0b7Gold (Win95; I) [Netscape]">
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+
+<p><b><font size="+3">DOS INT 21h - DOS Function Codes</font></b></p>
+
+<p>The follow abridged list of DOS interrupts has been extracted from a
+large list compiled by Ralf Brown. These are available on any Simtel mirror
+(e.g. <a href="http://sunsite.anu.edu.au/archives">sunsite.anu.edu.au</a>)
+under the directory ms-dos/info/interNNp.zip</p>
+
+<p><a name="Index"></a></p>
+
+<table border="3" bgcolor="#FFFF80">
+<tbody><tr>
+<td><b>AH</b></td>
+
+<td><b>Description</b></td>
+
+<td><b>AH</b></td>
+
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>01</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah01">Read
+character from STDIN</a></td>
+
+<td>02</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah02">Write
+character to STDOUT</a></td>
+</tr>
+
+<tr>
+<td>05</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah05">Write
+character to printer</a></td>
+
+<td>06</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah06">Console
+Input/Output</a></td>
+</tr>
+
+<tr>
+<td>07</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah07">Direct
+char read (STDIN), no echo</a></td>
+
+<td>08</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah08">Char
+read from STDIN, no echo</a></td>
+</tr>
+
+<tr>
+<td>09</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah09">Write
+string to STDOUT</a></td>
+
+<td>0A</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah0a">Buffered
+input</a></td>
+</tr>
+
+<tr>
+<td>0B</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah0b">Get STDIN
+status</a></td>
+
+<td>0C</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah0c">Flush
+buffer for STDIN</a></td>
+</tr>
+
+<tr>
+<td>0D</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah0d">Disk
+reset</a></td>
+
+<td>0E</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah0e">Select
+default drive</a></td>
+</tr>
+
+<tr>
+<td>19</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah19h">Get
+current default drive</a></td>
+
+<td>25</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah25">Set interrupt
+vector</a></td>
+</tr>
+
+<tr>
+<td>2A</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah2a">Get system
+date</a></td>
+
+<td>2B</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah2b">Set system
+date</a></td>
+</tr>
+
+<tr>
+<td>2C</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah2c">Get system
+time</a></td>
+
+<td>2D</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah2D">Set system
+time</a></td>
+</tr>
+
+<tr>
+<td>2E</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah2e">Set verify
+flag</a></td>
+
+<td>30</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah30">Get DOS
+version</a></td>
+</tr>
+
+<tr>
+<td>35</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah35">Get Interrupt
+vector</a></td>
+</tr>
+
+<tr>
+<td>36</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah36">Get free
+disk space</a></td>
+
+<td>39</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah39">Create
+subdirectory</a></td>
+</tr>
+
+<tr>
+<td>3A</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah3a">Remove
+subdirectory</a></td>
+
+<td>3B</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah3b">Set working
+directory</a></td>
+</tr>
+
+<tr>
+<td>3C</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah3c">Create
+file</a></td>
+
+<td>3D</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah3d">Open
+file</a></td>
+</tr>
+
+<tr>
+<td>3E</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah3e">Close
+file</a></td>
+
+<td>3F</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah3f">Read
+file</a></td>
+</tr>
+
+<tr>
+<td>40</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah40">Write
+file</a></td>
+
+<td>41</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah41">Delete
+file</a></td>
+</tr>
+
+<tr>
+<td>42</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah42">Seek
+file</a></td>
+
+<td>43</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah43">Get/Set
+file attributes</a></td>
+</tr>
+
+<tr>
+<td>47</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah47">Get current
+directory</a></td>
+
+<td>4C</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah4c">Exit
+program</a></td>
+</tr>
+
+<tr>
+<td>4D</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah4d">Get return
+code</a></td>
+
+<td>54</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah54">Get verify
+flag</a></td>
+</tr>
+
+<tr>
+<td>56</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah56">Rename
+file</a></td>
+
+<td>57</td>
+
+<td><a href="http://spike.scu.edu.au/~barry/interrupts.html#ah57">Get/Set
+file date</a></td>
+</tr>
+</tbody></table>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah01"></a><b><font size="+1">AH
+= 01h - READ CHARACTER FROM STANDARD INPUT, WITH ECHO</font></b></p>
+
+<p>Return: AL = character read</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>^C/^Break are checked</li>
+
+<li>^P toggles the DOS-internal echo-to-printer flag</li>
+
+<li>^Z is not interpreted, thus not causing an EOF if input is redirected
+character is echoed to standard output</li>
+</ul>
+
+<p>SeeAlso: AH=06h,AH=07h,AH=08h,AH=0Ah</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah02"></a><b><font size="+1">AH
+= 02h -WRITE CHARACTER TO STANDARD OUTPUT</font></b></p>
+
+<p>Entry: DL = character to write</p>
+
+<p>Return: AL = last character output</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>^C/^Break are checked</li>
+
+<li>the last character output will be the character in DL unless DL=09h
+on entry, in which case AL=20h as tabs are expanded to blanks</li>
+
+<li>if standard output is redirected to a file, no error checks (write-
+protected, full media, etc.) are performed</li>
+</ul>
+
+<p>SeeAlso: AH=06h,AH=09h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah05"></a><b><font size="+1">AH
+= 05h - WRITE CHARACTER TO PRINTER</font></b></p>
+
+<p>Entry: DL = character to print</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>keyboard checked for ^C/^Break</li>
+
+<li>STDPRN is usually the first parallel port, but may be redirected under
+DOS 2+</li>
+
+<li>if the printer is busy, this function will wait</li>
+</ul>
+
+<p>SeeAlso: INT 17/AH=00h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah06"></a><b><font size="+1">AH
+= 06h - DIRECT CONSOLE OUTPUT</font></b></p>
+
+<p>Entry: DL = character (except FFh)</p>
+
+<p>Return: AL = character output</p>
+
+<p>Notes: does not check ^C/^Break</p>
+
+<p>SeeAlso: AH=02h,AH=09h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah07"></a><b><font size="+1">AH
+= 06h - DIRECT CONSOLE INPUT</font></b></p>
+
+<p>Entry: AH = 06h DL = FFh</p>
+
+<p>Return:</p>
+
+<ul>
+<li>ZF <i>set</i> if no character available and AL = 00h</li>
+
+<li>ZF <i>clear</i> if character available AL = character read</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>^C/^Break are NOT checked</li>
+
+<li>if the returned character is 00h, the user pressed a key with an extended
+keycode, which will be returned by the next call of this function</li>
+
+<li>although the return of AL=00h when no characters are available is not
+documented, some programs rely on this behavior</li>
+</ul>
+
+<p>SeeAlso: AH=0Bh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah07"></a><b><font size="+1">AH=07h
+- DIRECT CHARACTER INPUT, WITHOUT ECHO</font></b></p>
+
+<p>Return: AL = character read from standard input</p>
+
+<p>Notes: does not check ^C/^Break</p>
+
+<p>SeeAlso: AH=01h,AH=06h,AH=08h,AH=0Ah</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah08"></a><b><font size="+1">AH
+= 08h - CHARACTER INPUT WITHOUT ECHO</font></b></p>
+
+<p>Return: AL = character read from standard input</p>
+
+<p>Notes: ^C/^Break are checked</p>
+
+<p>SeeAlso: AH=01h,AH=06h,AH=07h,AH=0Ah,AH=64h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah09"></a><b><font size="+1">AH
+= 09h - WRITE STRING TO STANDARD OUTPUT</font></b></p>
+
+<p>Entry: DS:DX -&gt; '$'-terminated string</p>
+
+<p>Return: AL = 24h</p>
+
+<p>Notes: ^C/^Break are checked</p>
+
+<p>SeeAlso: AH=02h,AH=06h"OUTPUT"</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah0a"></a><b><font size="+1">AH
+= 0Ah - BUFFERED INPUT</font></b></p>
+
+<p>Entry: DS:DX -&gt; <a href="http://spike.scu.edu.au/~barry/interrupts.html#dosbuf">buffer
+(see below</a>)</p>
+
+<p>Return: buffer filled with user input</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>^C/^Break are checked</li>
+
+<li>reads from standard input</li>
+</ul>
+
+<p>SeeAlso: AH=0Ch</p>
+
+<p><a name="dosbuf"></a>Format of DOS input buffer:</p>
+
+<table border="2" cellspacing="2" cellpadding="2">
+<tbody><tr>
+<td><b>Offset</b></td>
+
+<td><b>Size</b></td>
+
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>00</td>
+
+<td>1</td>
+
+<td>maximum characters buffer can hold</td>
+</tr>
+
+<tr>
+<td>01</td>
+
+<td>1</td>
+
+<td>number of chars from last input which may be recalled OR number of
+characters actually read, excluding CR</td>
+</tr>
+
+<tr>
+<td>02</td>
+
+<td>n</td>
+
+<td>actual characters read, including the final carriage return</td>
+</tr>
+</tbody></table>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah0b"></a><b><font size="+1">AH=0Bh
+- GET STDIN STATUS</font></b></p>
+
+<p>Return:</p>
+
+<ul>
+<li>AL = 00h if no character available</li>
+
+<li>AL = FFh if character is available</li>
+</ul>
+
+<p>Notes: ^C/^Break are checked</p>
+
+<p>SeeAlso: AH=06h"INPUT"</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah0c"></a><b><font size="+1">AH
+= 0Ch - FLUSH BUFFER AND READ STANDARD INPUT</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = STDIN input function to execute after flushing buffer</li>
+
+<li>other registers as appropriate for the input function</li>
+</ul>
+
+<p>Return: as appropriate for the specified input function</p>
+
+<p>Note: if AL is not one of 01h,06h,07h,08h, or 0Ah, the buffer is flushed
+but no input is attempted</p>
+
+<p>SeeAlso: AH=01h,AH=06h"INPUT",AH=07h,AH=08h,AH=0Ah</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah0d"></a><b><font size="+1">AH
+= 0Dh - DISK RESET</font></b></p>
+
+<p>Notes: This function writes all modified disk buffers to disk, but does
+not update the directory information</p>
+
+<p>SeeAlso: AX=5D01h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah0e"></a><b><font size="+1">AH
+= 0Eh - SELECT DEFAULT DRIVE</font></b></p>
+
+<p>Entry: DL = new default drive (0=A:, 1=B:, etc)</p>
+
+<p>Return: AL = number of potentially valid drive letters</p>
+
+<p>Notes: the return value is the highest drive present</p>
+
+<p>SeeAlso: AH=19h,AH=3Bh,AH=DBh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah19h"></a><b><font size="+1">AH
+= 19h - GET CURRENT DEFAULT DRIVE</font></b></p>
+
+<p>Return: AL = drive (0=A:, 1=B:, etc)</p>
+
+<p>SeeAlso: AH=0Eh,AH=47h,AH=BBh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah25"></a><b><font size="+1">AH
+= 25h - SET INTERRUPT VECTOR</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = interrupt number</li>
+
+<li>DS:DX -&gt; new interrupt handler</li>
+</ul>
+
+<p>Notes: this function is preferred over direct modification of the interrupt
+vector table</p>
+
+<p>SeeAlso: AX=2501h,AH=35h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah2a"></a><b><font size="+1">AH
+= 2Ah - GET SYSTEM DATE</font></b></p>
+
+<p>Return: CX = year (1980-2099) DH = month DL = day AL = day of week (00h=Sunday)</p>
+
+<p>SeeAlso: AH=2Bh"DOS",AH=2Ch,AH=E7h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah2b"></a><b><font size="+1">AH
+= 2Bh - SET SYSTEM DATE</font></b></p>
+
+<p>Entry: CX = year (1980-2099) DH = month DL = day</p>
+
+<p>Return:</p>
+
+<ul>
+<li>AL = 00 successful</li>
+
+<li>FFh invalid date, system date unchanged</li>
+</ul>
+
+<p>Note: DOS 3.3+ also sets CMOS clock</p>
+
+<p>SeeAlso: AH=2Ah,AH=2Dh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah2c"></a><b><font size="+1">AH
+= 2Ch - GET SYSTEM TIME</font></b></p>
+
+<p>Return: CH = hour CL = minute DH = second DL = 1/100 seconds</p>
+
+<p>Note: on most systems, the resolution of the system clock is about 5/100sec,
+so returned times generally do not increment by 1 on some systems, DL may
+always return 00h</p>
+
+<p>SeeAlso: AH=2Ah,AH=2Dh,AH=E7h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah2D"></a><b><font size="+1">AH
+= 2Dh - SET SYSTEM TIME</font></b></p>
+
+<p>Entry: CH = hour CL = minute DH = second DL = 1/100 seconds</p>
+
+<p>Return:</p>
+
+<ul>
+<li>AL = 00h successful</li>
+
+<li>FFh if invalid time, system time unchanged</li>
+</ul>
+
+<p>Note: DOS 3.3+ also sets CMOS clock</p>
+
+<p>SeeAlso: AH=2Bh"DOS",AH=2Ch</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah2e"></a><b><font size="+1">AH
+= 2Eh - SET VERIFY FLAG</font></b></p>
+
+<p>Entry: AL = new state of verify flag (00 off, 01h o)</p>
+
+<p>Notes:</p>
+
+<ul>
+<li>default state at system boot is OFF</li>
+
+<li>when ON, all disk writes are verified provided the device driver supports
+read-after-write verification</li>
+</ul>
+
+<p>SeeAlso: AH=54h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah30"></a><b><font size="+1">AH=30h
+- GET DOS VERSION</font></b></p>
+
+<p>Entry: AL = what to return in BH (00h OEM number, 01h version flag)</p>
+
+<p>Return:</p>
+
+<ul>
+<li>AL = major version number (00h if DOS 1.x)</li>
+
+<li>AH = minor version number</li>
+
+<li>BL:CX = 24-bit user serial number (most versions do not use this) if
+DOS &lt;5 or AL=00h</li>
+
+<li>BH = MS-DOS OEM number if DOS 5+ and AL=01h</li>
+
+<li>BH = version flag bit 3: DOS is in ROM other: reserved (0)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>DOS 4.01 and 4.02 identify themselves as version 4.00</li>
+
+<li>MS-DOS 6.21 reports its version as 6.20; version 6.22 returns the correct
+value</li>
+
+<li>Windows95 returns version 7.00 (the underlying MS-DOS)</li>
+</ul>
+
+<p>SeeAlso: AX=3000h/BX=3000h,AX=3306h,AX=4452h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah35"></a><b><font size="+1">AH=35h
+- GET INTERRUPT VECTOR</font></b></p>
+
+<p>Entry: AL = interrupt number</p>
+
+<p>Return: ES:BX -&gt; current interrupt handler</p>
+
+<p>SeeAlso: AH=25h,AX=2503h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah36"></a><b><font size="+1">AH
+= 36h - GET FREE DISK SPACE</font></b></p>
+
+<p>Entry: DL = drive number (0=default, 1=A:, etc)</p>
+
+<p>Return:</p>
+
+<ul>
+<li>AX = FFFFh if invalid drive</li>
+
+<li>AX = sectors per cluster BX = number of free clusters CX = bytes per
+sector DX = total clusters on drive</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>free space on drive in bytes is AX * BX * CX</li>
+
+<li>total space on drive in bytes is AX * CX * DX</li>
+
+<li>"lost clusters" are considered to be in use</li>
+
+<li>this function does not return proper results on CD-ROMs; use AX=4402h"CD-ROM"
+instead</li>
+</ul>
+
+<p>SeeAlso: AH=1Bh,AH=1Ch,AX=4402h"CD-ROM"</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah39"></a><b><font size="+1">AH
+= 39h - "MKDIR" - CREATE SUBDIRECTORY</font></b></p>
+
+<p>Entry: DS:DX -&gt; ASCIZ pathname</p>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful AX destroyed</li>
+
+<li>CF set on error AX = error code (03h,05h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>all directories in the given path except the last must exist</li>
+
+<li>fails if the parent directory is the root and is full</li>
+
+<li>DOS 2.x-3.3 allow the creation of a directory sufficiently deep that
+it is not possible to make that directory the current directory because
+the path would exceed 64 characters</li>
+</ul>
+
+<p>SeeAlso: AH=3Ah,AH=3Bh,AH=6Dh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah3a"></a><b><font size="+1">AH
+= 3Ah - "RMDIR" - REMOVE SUBDIRECTORY</font></b></p>
+
+<p>Entry: DS:DX -&gt; ASCIZ pathname of directory to be removed</p>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX destroyed</li>
+
+<li>CF set on error AX = error code (03h,05h,06h,10h)</li>
+</ul>
+
+<p>Notes: directory must be empty (contain only '.' and '..' entries)</p>
+
+<p>SeeAlso: AH=39h,AH=3Bh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah3b"></a><b><font size="+1">AH
+= 3Bh - "CHDIR" - SET CURRENT DIRECTORY</font></b></p>
+
+<p>Entry: DS:DX -&gt; ASCIZ pathname to become current directory (max 64
+bytes)</p>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX destroyed</li>
+
+<li>CF set on error AX = error code (03h)</li>
+</ul>
+
+<p>Notes: if new directory name includes a drive letter, the default drive
+is not changed, only the current directory on that drive</p>
+
+<p>SeeAlso: AH=47h,AH=71h,INT 2F/AX=1105h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah3c"></a><b><font size="+1">AH
+= 3Ch - "CREAT" - CREATE OR TRUNCATE FILE</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>CX = <a href="http://spike.scu.edu.au/~barry/interrupts.html#fattr">file
+attributes</a></li>
+
+<li>DS:DX -&gt; ASCIZ filename</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX = file handle</li>
+
+<li>CF set on error AX = error code (03h,04h,05h)</li>
+</ul>
+
+<p>Notes: if a file with the given name exists, it is truncated to zero
+length</p>
+
+<p>SeeAlso: AH=16h,AH=3Dh,AH=5Ah,AH=5Bh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah3d"></a><b><font size="+1">AH
+= 3Dh - "OPEN" - OPEN EXISTING FILE</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = access and sharing modes</li>
+
+<li>DS:DX -&gt; ASCIZ filename</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX = file handle</li>
+
+<li>CF set on error AX = error code (01h,02h,03h,04h,05h,0Ch,56h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>file pointer is set to start of file</li>
+
+<li>file handles which are inherited from a parent also inherit sharing
+and access restrictions</li>
+
+<li>files may be opened even if given the hidden or system attributes</li>
+</ul>
+
+<p>SeeAlso: AH=0Fh,AH=3Ch,AX=4301h,AX=5D00h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah3e"></a><b><font size="+1">AH
+= 3Eh - "CLOSE" - CLOSE FILE</font></b></p>
+
+<p>Entry: BX = file handle</p>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX destroyed</li>
+
+<li>CF set on error, AX = error code (06h)</li>
+</ul>
+
+<p>Note: if the file was written to, any pending disk writes are performed,
+the time and date stamps are set to the current time, and the directory
+entry is updated</p>
+
+<p>SeeAlso: AH=10h,AH=3Ch,AH=3Dh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah3f"></a><b><font size="+1">AH
+= 3Fh - "READ" - READ FROM FILE OR DEVICE</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>BX = file handle</li>
+
+<li>CX = number of bytes to read</li>
+
+<li>DS:DX -&gt; buffer for data</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful - AX = number of bytes actually read (0 if at
+EOF before call)</li>
+
+<li>CF set on error AX = error code (05h,06h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>data is read beginning at current file position, and the file position
+is updated after a successful read</li>
+
+<li>the returned AX may be smaller than the request in CX if a partial
+read occurred</li>
+
+<li>if reading from CON, read stops at first CR</li>
+</ul>
+
+<p>SeeAlso: AH=27h,AH=40h,AH=93h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah40"></a><b><font size="+1">AH=40h
+- "WRITE" - WRITE TO FILE OR DEVICE</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>BX = file handle</li>
+
+<li>CX = number of bytes to write</li>
+
+<li>DS:DX -&gt; data to write</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful -AX = number of bytes actually written</li>
+
+<li>CF set on error - AX = error code (05h,06h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>if CX is zero, no data is written, and the file is truncated or extended
+to the current position</li>
+
+<li>data is written beginning at the current file position, and the file
+position is updated after a successful write</li>
+
+<li>the usual cause for AX &lt; CX on return is a full disk</li>
+</ul>
+
+<p>SeeAlso: AH=28h,AH=3Fh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah41"></a><b><font size="+1">AH
+= 41H - "UNLINK" - DELETE FILE</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>DS:DX -&gt; ASCIZ filename (no wildcards, but see notes)</li>
+
+<li>CL = attribute mask for deletion (server call only, see notes)</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX destroyed (DOS 3.3) AL seems to be drive
+of deleted file</li>
+
+<li>CF set on error AX = error code (02h,03h,05h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>(DOS 3.1+) wildcards are allowed if invoked via AX=5D00h, in which
+case the filespec must be canonical (as returned by AH=60h), and only files
+matching the attribute mask in CL are deleted</li>
+
+<li>DOS does not erase the file's data; it merely becomes inaccessible
+because the FAT chain for the file is cleared</li>
+
+<li>deleting a file which is currently open may lead to filesystem corruption.</li>
+</ul>
+
+<p>SeeAlso: AH=13h,AX=4301h,AX=4380h,AX=5D00h,AH=60h,AH=71h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah42"></a><b><font size="+1">AH=42h
+- "LSEEK" - SET CURRENT FILE POSITION</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = origin of move 00h start of file 01h current file position 02h
+end of file</li>
+
+<li>BX = file handle</li>
+
+<li>CX:DX = offset from origin of new file position</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, DX:AX = new file position in bytes from start
+of file</li>
+
+<li>CF set on error, AX = error code (01h,06h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>for origins 01h and 02h, the pointer may be positioned before the start
+of the file; no error is returned in that case, but subsequent attempts
+at I/O will produce errors</li>
+
+<li>if the new position is beyond the current end of file, the file will
+be extended by the next write (see AH=40h)</li>
+</ul>
+
+<p>SeeAlso: AH=24h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah43"></a><b><font size="+1">AH=43
+- GET FILE ATTRIBUTES</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = 00h</li>
+
+<li>DS:DX -&gt; ASCIZ filename</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful CX = <a href="http://spike.scu.edu.au/~barry/interrupts.html#fattr">file
+attributes</a></li>
+
+<li>CF set on error, AX = error code (01h,02h,03h,05h)</li>
+</ul>
+
+<p>BUG: Windows for Workgroups returns error code 05h (access denied) instead
+of error code 02h (file not found) when attempting to get the attributes
+of a nonexistent file.</p>
+
+<p>SeeAlso: AX=4301h,AX=4310h,AX=7143h,AH=B6h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><b><font size="+1">AH=43
+- "CHMOD" - SET FILE ATTRIBUTES</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = 01h</li>
+
+<li>CX = new <a href="http://spike.scu.edu.au/~barry/interrupts.html#fattr">file
+attributes</a></li>
+
+<li>DS:DX -&gt; ASCIZ filename</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, AX destroyed</li>
+
+<li>CF set on error, AX = error code (01h,02h,03h,05h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>will not change volume label or directory attribute bits, but will
+change the other attribute bits of a directory</li>
+
+<li>MS-DOS 4.01 reportedly closes the file if it is currently open</li>
+</ul>
+
+<p>SeeAlso: AX=4300h,AX=4311h,AX=7143h,INT 2F/AX=110Eh</p>
+
+<p><a name="fattr"></a>Bitfields for file attributes:</p>
+
+<table border="2" cellspacing="2" cellpadding="2">
+<tbody><tr>
+<td><b>Bits</b></td>
+
+<td>7</td>
+
+<td>6</td>
+
+<td>5</td>
+
+<td>4</td>
+
+<td>3</td>
+
+<td>2</td>
+
+<td>1</td>
+
+<td>0</td>
+</tr>
+
+<tr>
+<td><b>Description</b></td>
+
+<td>shareable</td>
+
+<td>-</td>
+
+<td>archive</td>
+
+<td>directory</td>
+
+<td>vol. label</td>
+
+<td>system</td>
+
+<td>hidden</td>
+
+<td>read-only</td>
+</tr>
+</tbody></table>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah47"></a><b><font size="+1">AH
+= 47h - "CWD" - GET CURRENT DIRECTORY</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>DL = drive number (00h = default, 01h = A:, etc)</li>
+
+<li>DS:SI -&gt; 64-byte buffer for ASCIZ pathname</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful</li>
+
+<li>CF set on error, AX = error code (0Fh)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>the returned path does not include a drive or the initial backslash</li>
+
+<li>many Microsoft products for Windows rely on AX being 0100h on success</li>
+</ul>
+
+<p>SeeAlso: AH=19h,AH=3Bh,AH=71h</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah4c"></a><b><font size="+1">AH
+= 4Ch - "EXIT" - TERMINATE WITH RETURN CODE</font></b></p>
+
+<p>Entry: AL = return code</p>
+
+<p>Return: never returns</p>
+
+<p>Notes: unless the process is its own parent, all open files are closed
+and all memory belonging to the process is freed</p>
+
+<p>SeeAlso: AH=00h,AH=26h,AH=4Bh,AH=4Dh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah4d"></a><b><font size="+1">AH
+= 4Dh - GET RETURN CODE (ERRORLEVEL)</font></b></p>
+
+<p>Return:</p>
+
+<ul>
+<li>AH = termination type (00=normal, 01h control-C abort, 02h=critical
+error abort, 03h terminate and stay resident)</li>
+
+<li>AL = return code</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>the word in which DOS stores the return code is cleared after being
+read by this function, so the return code can only be retrieved once</li>
+
+<li>COMMAND.COM stores the return code of the last external command it
+executed as ERRORLEVEL</li>
+</ul>
+
+<p>SeeAlso: AH=4Bh,AH=4Ch,AH=8Ah</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah54"></a><b><font size="+1">AH
+= 54h - GET VERIFY FLAG</font></b></p>
+
+<p>Return: AL = verify flag (00h=off, 01h=on, i.e. all disk writes verified
+after writing)</p>
+
+<p>SeeAlso: AH=2Eh</p>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah56"></a><b><font size="+1">AH
+= 56h - "RENAME" - RENAME FILE</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>DS:DX -&gt; ASCIZ filename of existing file (no wildcards, but see
+below)</li>
+
+<li>ES:DI -&gt; ASCIZ new filename (no wildcards)</li>
+
+<li>CL = attribute mask (server call only, see below)</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful</li>
+
+<li>CF set on error, AX= error code (02h,03h,05h,11h)</li>
+</ul>
+
+<p>Notes:</p>
+
+<ul>
+<li>allows move between directories on same logical volume</li>
+
+<li>this function does not set the archive attribute</li>
+
+<li>open files should not be renamed</li>
+
+<li>(DOS 3.0+) allows renaming of directories</li>
+</ul>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><a name="ah57"></a><b><font size="+1">AH
+= 57h - GET FILE'S LAST-WRITTEN DATE AND TIME</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL = 00h (Get attribute)</li>
+
+<li>BX = file handle</li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful, CX = file's time DX = file's date</li>
+
+<li>CF set on error, AX = error code (01h,06h)</li>
+</ul>
+
+<p>SeeAlso: AX=5701h</p>
+
+<p><a name="dt"></a>Bitfields for file time:</p>
+
+<table border="2" cellspacing="2" cellpadding="2">
+<tbody><tr>
+<td><b>Bits</b></td>
+
+<td>15-11</td>
+
+<td>10-5</td>
+
+<td>4-0</td>
+</tr>
+
+<tr>
+<td><b>Description</b></td>
+
+<td>hours</td>
+
+<td>minutes</td>
+
+<td>seconds</td>
+</tr>
+</tbody></table>
+
+<p>Bitfields for file date:</p>
+
+<table border="2" cellspacing="2" cellpadding="2">
+<tbody><tr>
+<td><b>Bits</b></td>
+
+<td>15-9</td>
+
+<td>8-5</td>
+
+<td>4-0</td>
+</tr>
+
+<tr>
+<td><b>Description</b></td>
+
+<td>year (1980-)</td>
+
+<td>month</td>
+
+<td>day</td>
+</tr>
+</tbody></table>
+
+<p><a href="http://spike.scu.edu.au/~barry/interrupts.html#Index"><img src="./DOS Interrupts_files/back.gif" alt="[Index]" height="23" width="20"></a><b><font size="+1">AH
+= 57h - SET FILE'S LAST-WRITTEN DATE AND TIME</font></b></p>
+
+<p>Entry:</p>
+
+<ul>
+<li>AL =01h (Set attributes)</li>
+
+<li>BX = file handle</li>
+
+<li>CX = <a href="http://spike.scu.edu.au/~barry/dt">new time</a></li>
+
+<li>DX = <a href="http://spike.scu.edu.au/~barry/interrupts.html#dt">new
+date</a></li>
+</ul>
+
+<p>Return:</p>
+
+<ul>
+<li>CF clear if successful</li>
+
+<li>CF set on error AX = error code (01h,06h)</li>
+</ul>
+
+<p>SeeAlso: AX=5700h</p>
+
+<p>
+</p><hr width="100%"><p></p>
+
+<p><i>This page is maintained by <a href="http://spike.scu.edu.au/~barry/index.html">Barry
+Wilks</a>.</i></p>
+
+
+
+</body></html>
