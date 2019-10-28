@@ -7,9 +7,9 @@ routes = {
 
 
 def remove_html_whitespace(string):
-    copy = ""
+    copy = string[:]
 
-    return copy
+    return copy.replace('\n', '')
 
 
 class HTMLWhiteSpaceRemover(HTMLParser):
@@ -54,8 +54,9 @@ class Server(BaseHTTPRequestHandler):
         self.respond()
 
     def handle_http(self, status, content_type):
-        filename = "../web-files/python - How to generate random html document - Stack Overflow.html"
+        # filename = "../web-files/python - How to generate random html document - Stack Overflow.html"
         # filename = "../web-files/DOS Interrupts.html"
+        filename = "../web-files/DOS Interrupts large version.html"
         # filename = "../web-files/hello.html"
         with open(filename, encoding="utf8") as file:
             parser = HTMLWhiteSpaceRemover()
@@ -66,8 +67,9 @@ class Server(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', content_type)
             self.end_headers()
-            return bytes(parser.output, "UTF-8")
-            # return bytes(response, "UTF-8")
+            response = remove_html_whitespace(response)
+            # return bytes(parser.output, "UTF-8")
+            return bytes(response, "UTF-8")
 
     def respond(self):
         content = self.handle_http(200, 'text/html')
