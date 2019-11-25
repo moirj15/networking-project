@@ -27,7 +27,7 @@ constexpr wchar_t CARRIAGE_RETURN = u8'\r';
 
 static std::wstring read_utf8_file(const char *filename) {
   std::wifstream wide_file(filename);
-  wide_file.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+  //  wide_file.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
   std::wstringstream wss;
   wss << wide_file.rdbuf();
   return wss.str();
@@ -60,11 +60,29 @@ static std::vector<Token> make_tokens(const std::wstring &contents) {
 }
 
 static std::vector<Token> remove_whitespace(const std::vector<Token> &tokens) {
-  return {};
+  std::vector<Token> ret;
+  bool safe_to_trim = false;
+  for (size_t i = 0; i < tokens.size(); i++) {
+    if (tokens[i].type == Token::OpenAngleBracket) {
+      safe_to_trim = true;
+    } else if (tokens[i].type == Token::CloseAngleBracket) {
+      safe_to_trim = false;
+    }
+    if (i > 0 && i < tokens.size() - 1 && safe_to_trim) {
+      if (!whitespace_char(tokens[i - 1].data[0]) && !whitespace_char(tokens[i + 1].data[0])) {
+        ret.push_back(tokens[i]);
+      }
+    }
+  }
+  return ret;
 }
 
 static std::wstring tokens_to_wstring(const std::vector<Token> &tokens) {
-  return {};
+  std::wstring str;
+  for (const auto &token : tokens) {
+    str += token.data;
+  }
+  return str;
 }
 
 std::wstring compress_html_file(const char *filename) {
