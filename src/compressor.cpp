@@ -22,20 +22,34 @@ struct Token {
   Token(std::string s, Type t) : data(s), type(t) {}
 };
 
-constexpr wchar_t SPACE = u8' ';
-constexpr wchar_t TAB = u8'\t';
-constexpr wchar_t NEW_LINE = u8'\n';
-constexpr wchar_t CARRIAGE_RETURN = u8'\r';
+// static std::string read_utf8_file(const char *filename) {
+//  std::ifstream wide_file(filename);
+//  std::stringstream stringstream;
+//  stringstream << wide_file.rdbuf();
+//  return stringstream.str();
+//}
+std::tuple<char *, size_t> read_file(const char *filename) {
+  FILE *fp = nullptr;
+  // TODO: error checking
+  fp = fopen(filename, "rb");
+  char *src = nullptr;
+  uint64_t len = 0;
 
-static std::string read_utf8_file(const char *filename) {
-  std::ifstream wide_file(filename);
-  std::stringstream stringstream;
-  stringstream << wide_file.rdbuf();
-  return stringstream.str();
-}
+  fseek(fp, 0, SEEK_END);
+  len = ftell(fp);
+  rewind(fp);
 
-inline static bool whitespace_char(const wchar_t wc) {
-  return (wc == SPACE) || (wc == TAB) || (wc == NEW_LINE) || (wc == CARRIAGE_RETURN);
+  if (len == 0) {
+    fprintf(stderr, "failed to get file size");
+    // exit(EXIT_FAILURE);
+  }
+  src = new char[len + 1]();
+  // src = (char *)calloc(len + 1, sizeof(char));
+  len = fread(src, sizeof(char), len, fp);
+
+  fclose(fp);
+
+  return {src, len};
 }
 
 static std::vector<Token> make_tokens(const std::string &contents) {
@@ -95,9 +109,11 @@ static std::string tokens_to_wstring(const std::vector<Token> &tokens) {
 }
 
 std::tuple<std::string, size_t, size_t> compress_html_file(const char *filename) {
-  auto contents = read_utf8_file(filename);
-  size_t size_before_compression = contents.size();
+  // auto contents = read_utf8_file(filename);
+  auto [contents, size_before_compression] = read_file(filename);
+  // size_t size_before_compression = contents.size();
   auto tokens = make_tokens(contents);
+  delete[](contents);
   auto compressed_tokens = remove_whitespace(tokens);
   auto compressed_contents = tokens_to_wstring(compressed_tokens);
   size_t size_after_compression = compressed_contents.size();
