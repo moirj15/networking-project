@@ -1,5 +1,6 @@
 #ifndef SERVER_H
 #define SERVER_H
+
 #define CPPHTTPLIB_ZLIB_SUPPORT 1
 #include "httplib.h"
 
