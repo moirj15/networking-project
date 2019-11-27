@@ -4,8 +4,8 @@
 
 #include <cstdio>
 #include <filesystem>
-Server::Server(const std::string &filename, bool compress_html) {
-  if (compress_html) {
+Server::Server(const std::string &filename, bool compress) : compress_(compress) {
+  if (compress_) {
     auto [file, origional_size, compressed_size] = compress_html_file(filename.c_str());
     html_file_ = file;
     printf("Original file size: %lld\n", origional_size);
@@ -22,8 +22,30 @@ Server::Server(const std::string &filename, bool compress_html) {
   init_callbacks();
 }
 void Server::load_images(const std::vector<std::string> &filenames) {
-  for (const auto &filename : filenames) {
-    website_images_[filename] = read_file(filename.c_str());
+  if (compress_) {
+    for (auto filename : filenames) {
+      auto type = filename.substr(filename.find_first_of('.'), 4);
+      if (type == ".svg") {
+        website_images_[filename] = read_file(filename.c_str());
+        continue;
+      } else {
+        auto [file, original_size, compressed_size] = compress_image(filename.c_str());
+        printf("FILE: %s\n", filename.c_str());
+        printf("Original file size: %lld\n", original_size);
+        printf("Compressed file size: %lld\n", compressed_size);
+        printf("Size difference: %lld\n", original_size - compressed_size);
+        printf("Difference as percent: %f\n",
+            ((float)(original_size - compressed_size)) / ((float)original_size));
+
+        // filename.replace(filename.find(type), 5, ".webp");
+        website_images_[filename] = {compressed_size, std::unique_ptr<char[]>(file)};
+      }
+    }
+
+  } else {
+    for (const auto &filename : filenames) {
+      website_images_[filename] = read_file(filename.c_str());
+    }
   }
 }
 
@@ -38,7 +60,7 @@ std::vector<std::string> Server::load_file_paths(const std::string &filename) {
   return ret;
 }
 
-SizedPtr Server::read_file(const char *filename) {
+FatPtr Server::read_file(const char *filename) {
   FILE *fp = nullptr;
   // TODO: error checking
   fp = fopen(filename, "rb");
@@ -65,7 +87,7 @@ void Server::init_callbacks() {
   for (const auto &pair : website_images_) {
     auto filename = pair.first;
     auto &image = pair.second;
-    auto response_type = get_response_type(filename);
+    // auto response_type = get_response_type(filename);
     auto callback = [this, filename](const httplib::Request &req, httplib::Response &response) {
       auto response_type = get_response_type(filename);
       response.set_content(website_images_[filename].data.get(), website_images_[filename].size,
@@ -80,7 +102,10 @@ void Server::init_callbacks() {
     response.set_content(html_file_.c_str(), html_file_.size(), "text/html");
   });
 }
-
 std::string Server::get_response_type(const std::string &filename) {
-  return filename.substr(filename.find_last_of(".") + 1);
+  auto type = filename.substr(filename.find_last_of(".") + 1);
+  if (type == "php" || type == "js") {
+    return "text/" + type;
+  }
+  return "image/" + type;
 }

@@ -8,6 +8,10 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <webp/encode.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 struct Token {
   std::string data;
@@ -18,16 +22,9 @@ struct Token {
     WhiteSpace,
   } type;
 
-  //  Token(const char *str, size_t size, Type t) : data(str, size), type(t) {}
-  Token(std::string s, Type t) : data(s), type(t) {}
+  Token(std::string s, Type t) : data(std::move(s)), type(t) {}
 };
 
-// static std::string read_utf8_file(const char *filename) {
-//  std::ifstream wide_file(filename);
-//  std::stringstream stringstream;
-//  stringstream << wide_file.rdbuf();
-//  return stringstream.str();
-//}
 std::tuple<char *, size_t> read_file(const char *filename) {
   FILE *fp = nullptr;
   // TODO: error checking
@@ -118,4 +115,16 @@ std::tuple<std::string, size_t, size_t> compress_html_file(const char *filename)
   auto compressed_contents = tokens_to_wstring(compressed_tokens);
   size_t size_after_compression = compressed_contents.size();
   return {compressed_contents, size_before_compression, size_after_compression};
+}
+
+std::tuple<char *, size_t, size_t> compress_image(const char *filename) {
+  int width = 0;
+  int height = 0;
+  int channels = 0;
+  unsigned char *image = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
+  unsigned char *compressed;
+  size_t compressed_size = WebPEncodeRGBA(image, width, height, width * 4, 25.0f, &compressed);
+  // char *compressed_copy = new char[compressed_size]();
+  // memcpy(compressed_copy, compressed, compressed_size);
+  return {(char *)compressed, width * height, compressed_size};
 }

@@ -1,2 +1,5 @@
+build/*
+cpp_test/*
 venv/*
 .idea/*
+vis/*
