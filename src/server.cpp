@@ -6,45 +6,41 @@
 #include <filesystem>
 Server::Server(const std::string &filename, bool compress) : compress_(compress) {
   if (compress_) {
-    auto [file, origional_size, compressed_size] = compress_html_file(filename.c_str());
+    auto [file, original_size, compressed_size] = compress_html_file(filename.c_str());
     html_file_ = file;
-    printf("Original file size: %lld\n", origional_size);
-    printf("Compressed file size: %lld\n", compressed_size);
-    printf("Size difference: %lld\n", origional_size - compressed_size);
-    printf("Difference as percent: %f\n",
-        ((float)(origional_size - compressed_size)) / ((float)origional_size));
+    metrics_.emplace_back(filename, original_size, compressed_size);
   } else {
     auto file = read_file(filename.c_str());
     html_file_ = {file.data.get(), file.size};
   }
   auto paths = load_file_paths(filename);
-  load_images(paths);
+  load_data(paths);
   init_callbacks();
 }
-void Server::load_images(const std::vector<std::string> &filenames) {
+
+void Server::print_metrics() {
+  printf("filename, original size, compressed size, percent compressed\n");
+  for (const auto &metric : metrics_) {
+    printf("%s, %lld, %lld, %f\n", metric.filename.c_str(), metric.original_size,
+        metric.compressed_size, metric.percent_compressed);
+  }
+}
+
+void Server::load_data(const std::vector<std::string> &filenames) {
   if (compress_) {
     for (auto filename : filenames) {
       auto type = filename.substr(filename.find_first_of('.'), 4);
-      if (type == ".svg") {
-        website_images_[filename] = read_file(filename.c_str());
-        continue;
+      if (type == ".svg" || type == ".css") {
+        website_data_[filename] = read_file(filename.c_str());
       } else {
         auto [file, original_size, compressed_size] = compress_image(filename.c_str());
-        printf("FILE: %s\n", filename.c_str());
-        printf("Original file size: %lld\n", original_size);
-        printf("Compressed file size: %lld\n", compressed_size);
-        printf("Size difference: %lld\n", original_size - compressed_size);
-        printf("Difference as percent: %f\n",
-            ((float)(original_size - compressed_size)) / ((float)original_size));
-
-        // filename.replace(filename.find(type), 5, ".webp");
-        website_images_[filename] = {compressed_size, std::unique_ptr<char[]>(file)};
+        metrics_.emplace_back(filename, original_size, compressed_size);
+        website_data_[filename] = {compressed_size, std::unique_ptr<char[]>(file)};
       }
     }
-
   } else {
     for (const auto &filename : filenames) {
-      website_images_[filename] = read_file(filename.c_str());
+      website_data_[filename] = read_file(filename.c_str());
     }
   }
 }
@@ -55,7 +51,6 @@ std::vector<std::string> Server::load_file_paths(const std::string &filename) {
   std::vector<std::string> resource_paths;
   for (const auto &entry : std::filesystem::directory_iterator(path)) {
     ret.push_back(entry.path().string());
-    // resource_paths.emplace_back(entry.path());
   }
   return ret;
 }
@@ -84,14 +79,14 @@ FatPtr Server::read_file(const char *filename) {
   return {len, std::unique_ptr<char[]>(src)};
 }
 void Server::init_callbacks() {
-  for (const auto &pair : website_images_) {
+  for (const auto &pair : website_data_) {
     auto filename = pair.first;
     auto &image = pair.second;
     // auto response_type = get_response_type(filename);
     auto callback = [this, filename](const httplib::Request &req, httplib::Response &response) {
       auto response_type = get_response_type(filename);
-      response.set_content(website_images_[filename].data.get(), website_images_[filename].size,
-          response_type.c_str());
+      response.set_content(
+          website_data_[filename].data.get(), website_data_[filename].size, response_type.c_str());
     };
 
     auto pattern = filename.substr(filename.find_last_of("/"));

@@ -1,22 +1,34 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#define CPPHTTPLIB_ZLIB_SUPPORT 1
+//#define CPPHTTPLIB_ZLIB_SUPPORT 1
 #include "httplib.h"
 
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
 struct FatPtr {
   size_t size;
   std::unique_ptr<char[]> data;
 };
 
+struct Metrics {
+  std::string filename;
+  size_t original_size;
+  size_t compressed_size;
+  float percent_compressed;
+  Metrics(const std::string &f, size_t os, size_t cs) :
+      filename(f), original_size(os), compressed_size(cs),
+      percent_compressed(((float)(os - cs) / (float)os) * 100.0f) {}
+};
+
 class Server {
   httplib::Server server_;
   std::unordered_map<std::string, httplib::Server::Handler> get_callbacks_;
-  std::unordered_map<std::string, FatPtr> website_images_;
+  std::unordered_map<std::string, FatPtr> website_data_;
+  std::vector<Metrics> metrics_;
   std::string html_file_;
   bool compress_;
 
@@ -34,13 +46,15 @@ public:
    */
   inline void listen() { server_.listen("localhost", 1234); }
 
+  void print_metrics();
+
 private:
   /**
    * Loads the images with the given filenames.
    *
    * @param filenames: The list of filenames that we'll be loading.
    */
-  void load_images(const std::vector<std::string> &filenames);
+  void load_data(const std::vector<std::string> &filenames);
 
   /**
    * Loads the file paths for the files contained in the given filename's associated resource

@@ -22,6 +22,7 @@ struct Token {
     WhiteSpace,
   } type;
 
+  /// Construct a Token from the given string and type.
   Token(std::string s, Type t) : data(std::move(s)), type(t) {}
 };
 
@@ -38,10 +39,8 @@ std::tuple<char *, size_t> read_file(const char *filename) {
 
   if (len == 0) {
     fprintf(stderr, "failed to get file size");
-    // exit(EXIT_FAILURE);
   }
   src = new char[len + 1]();
-  // src = (char *)calloc(len + 1, sizeof(char));
   len = fread(src, sizeof(char), len, fp);
 
   fclose(fp);
@@ -49,20 +48,23 @@ std::tuple<char *, size_t> read_file(const char *filename) {
   return {src, len};
 }
 
+/**
+ * Converts the given string into a list of tokens.
+ *
+ * @param contents: The string that will be converted to tokens.
+ * @return: The list of tokens.
+ */
 static std::vector<Token> make_tokens(const std::string &contents) {
   std::vector<Token> tokens;
   size_t pos = 0;
   while (pos < contents.size()) {
     if (contents[pos] == '<') {
-      //      tokens.emplace_back((char *)&contents[pos], 1, Token::OpenAngleBracket);
       tokens.emplace_back(contents.substr(pos, 1), Token::OpenAngleBracket);
       pos++;
     } else if (contents[pos] == '>') {
-      //      tokens.emplace_back((char *)&contents[pos], 1, Token::CloseAngleBracket);
       tokens.emplace_back(contents.substr(pos, 1), Token::CloseAngleBracket);
       pos++;
     } else if (iswspace(contents[pos])) {
-      //      tokens.emplace_back((char *)&contents[pos], 1, Token::WhiteSpace);
       tokens.emplace_back(contents.substr(pos, 1), Token::WhiteSpace);
       pos++;
     } else {
@@ -72,18 +74,21 @@ static std::vector<Token> make_tokens(const std::string &contents) {
         len++;
         pos++;
       }
-      //      tokens.emplace_back((char *)&contents[start], len, Token::String);
       tokens.emplace_back(contents.substr(start, len), Token::String);
     }
   }
   return tokens;
 }
 
+/**
+ * Removes any unneeded whitespace tokens from the list of tokens.
+ *
+ * @return: The list of tokens without unneeded whitespace.
+ */
 static std::vector<Token> remove_whitespace(const std::vector<Token> &tokens) {
   std::vector<Token> ret;
   bool safe_to_trim = false;
   for (size_t i = 0; i < tokens.size(); i++) {
-    // std::cout << tokens[i].data.data() << '\n';
     if (i > 0 && i < tokens.size() - 1) {
       if (((tokens[i - 1].type != Token::WhiteSpace) && (tokens[i + 1].type != Token::WhiteSpace)
               && (tokens[i].type == Token::WhiteSpace) && (tokens[i].data[0] != '\n'))
@@ -97,7 +102,13 @@ static std::vector<Token> remove_whitespace(const std::vector<Token> &tokens) {
   return ret;
 }
 
-static std::string tokens_to_wstring(const std::vector<Token> &tokens) {
+/**
+ * Converts the given list of tokens to a string.
+ *
+ * @param tokens: The list of tokens that will be converted.
+ * @return: The string.
+ */
+static std::string tokens_to_string(const std::vector<Token> &tokens) {
   std::string str;
   for (const auto &token : tokens) {
     str += token.data;
@@ -106,13 +117,11 @@ static std::string tokens_to_wstring(const std::vector<Token> &tokens) {
 }
 
 std::tuple<std::string, size_t, size_t> compress_html_file(const char *filename) {
-  // auto contents = read_utf8_file(filename);
   auto [contents, size_before_compression] = read_file(filename);
-  // size_t size_before_compression = contents.size();
   auto tokens = make_tokens(contents);
   delete[](contents);
   auto compressed_tokens = remove_whitespace(tokens);
-  auto compressed_contents = tokens_to_wstring(compressed_tokens);
+  auto compressed_contents = tokens_to_string(compressed_tokens);
   size_t size_after_compression = compressed_contents.size();
   return {compressed_contents, size_before_compression, size_after_compression};
 }
@@ -124,7 +133,6 @@ std::tuple<char *, size_t, size_t> compress_image(const char *filename) {
   unsigned char *image = stbi_load(filename, &width, &height, &channels, STBI_rgb_alpha);
   unsigned char *compressed;
   size_t compressed_size = WebPEncodeRGBA(image, width, height, width * 4, 25.0f, &compressed);
-  // char *compressed_copy = new char[compressed_size]();
-  // memcpy(compressed_copy, compressed, compressed_size);
+  delete[](image);
   return {(char *)compressed, width * height, compressed_size};
 }
