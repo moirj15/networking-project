@@ -41,6 +41,7 @@ void Server::load_data(const std::vector<std::string> &filenames) {
           filename_without_leading_dots.substr(filename_without_leading_dots.find_first_of('.'), 4);
       if (type == ".svg" || type == ".css" || type == ".php" || type == ".js") {
         website_data_[filename] = read_file(filename.c_str());
+        metrics_.emplace_back(filename, website_data_[filename].size, website_data_[filename].size);
       } else {
         auto [file, original_size, compressed_size] = compress_image(filename.c_str());
         metrics_.emplace_back(filename, original_size, compressed_size);
@@ -99,7 +100,7 @@ void Server::init_callbacks() {
     };
 
     auto pattern = filename.substr(filename.find_last_of("/"));
-#ifdef __WIN32
+#ifdef _WIN32
     pattern.replace(pattern.find_last_of("\\"), 1, "/");
 #endif
     server_.Get(pattern.c_str(), callback);
