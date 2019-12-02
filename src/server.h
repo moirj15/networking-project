@@ -29,6 +29,7 @@ class Server {
   std::unordered_map<std::string, httplib::Server::Handler> get_callbacks_;
   std::unordered_map<std::string, FatPtr> website_data_;
   std::vector<Metrics> metrics_;
+  std::string html_filename_;
   std::string html_file_;
   bool compress_;
 

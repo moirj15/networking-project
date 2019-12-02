@@ -25,6 +25,7 @@ else()
         flywheel-server
         pthread
         webp
+        z
         stdc++fs
     )
 endif ()
