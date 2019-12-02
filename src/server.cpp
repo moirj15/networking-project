@@ -99,7 +99,9 @@ void Server::init_callbacks() {
     };
 
     auto pattern = filename.substr(filename.find_last_of("/"));
+#ifdef __WIN32
     pattern.replace(pattern.find_last_of("\\"), 1, "/");
+#endif
     server_.Get(pattern.c_str(), callback);
   }
   server_.Get("/", [this](const httplib::Request &req, httplib::Response &response) {

@@ -1,6 +1,7 @@
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 #include <string>
+#include <tuple>
 
 /**
  * Compresses the given html file.
