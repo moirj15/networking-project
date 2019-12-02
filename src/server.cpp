@@ -20,17 +20,26 @@ Server::Server(const std::string &filename, bool compress) : compress_(compress)
 
 void Server::print_metrics() {
   printf("filename, original size, compressed size, percent compressed\n");
+  size_t total_original = 0;
+  size_t total_compressed = 0;
   for (const auto &metric : metrics_) {
     printf("%s, %lld, %lld, %f\n", metric.filename.c_str(), metric.original_size,
         metric.compressed_size, metric.percent_compressed);
+    total_original += metric.original_size;
+    total_compressed += metric.compressed_size;
   }
+  Metrics metric("Total", total_original, total_compressed);
+  printf("%s, %lld, %lld, %f\n", metric.filename.c_str(), metric.original_size,
+      metric.compressed_size, metric.percent_compressed);
 }
 
 void Server::load_data(const std::vector<std::string> &filenames) {
   if (compress_) {
     for (auto filename : filenames) {
-      auto type = filename.substr(filename.find_first_of('.'), 4);
-      if (type == ".svg" || type == ".css") {
+      auto filename_without_leading_dots = filename.substr(3);
+      auto type =
+          filename_without_leading_dots.substr(filename_without_leading_dots.find_first_of('.'), 4);
+      if (type == ".svg" || type == ".css" || type == ".php" || type == ".js") {
         website_data_[filename] = read_file(filename.c_str());
       } else {
         auto [file, original_size, compressed_size] = compress_image(filename.c_str());
