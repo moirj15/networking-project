@@ -10,7 +10,7 @@ To build it you need the following dependencies installed:
 You will also need a C++ compiler that implements C++17's filesystem library and CMake.
 
 To build:
-    mkdir build
-    cd build
-    cmake ..
-    make
+    `mkdir build`
+    `cd build`
+    `cmake ..`
+    `make`
