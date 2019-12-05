@@ -2,9 +2,10 @@
 
 #include "compressor.h"
 
+#include <iostream>
 #include <cstdio>
 #include <filesystem>
-Server::Server(const std::string &filename, bool compress) : compress_(compress) {
+Server::Server(const std::string &filename, bool compress) : html_filename_(filename), compress_(compress) {
   if (compress_) {
     auto [file, original_size, compressed_size] = compress_html_file(filename.c_str());
     html_file_ = file;
@@ -102,7 +103,11 @@ void Server::init_callbacks() {
     auto pattern = filename.substr(filename.find_last_of("/"));
 #ifdef _WIN32
     pattern.replace(pattern.find_last_of("\\"), 1, "/");
+#else 
+    auto p = get_path_from_filename(html_filename_);
+    pattern = p.substr(p.find_last_of("/")) +  pattern;
 #endif
+    std::cout << pattern << '\n';
     server_.Get(pattern.c_str(), callback);
   }
   server_.Get("/", [this](const httplib::Request &req, httplib::Response &response) {
